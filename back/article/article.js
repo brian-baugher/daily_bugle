@@ -92,13 +92,13 @@ const buildUpdate = (possibleFields, reqBody, starterUpdate={}) => {
 
 app.put('/', async (req, res) => {
     console.log('PUT recieved with req body: ' + JSON.stringify(req.body) + '\n')
-    if(!req.body?.id){
+    if(!req.query?.id){
         res.status(400).send({
             message: "no ID included in PUT"
         })
         return;
     }
-    const filter = {_id: new ObjectId(req.body.id)};
+    const filter = {_id: new ObjectId(req.query.id)};
     const update = buildUpdate(
         ['title', 'teaser', 'body', 'categories'], 
         req.body,
