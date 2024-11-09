@@ -15,9 +15,13 @@ const addComment = async (req, res, client) => {
         })
         return;
     }
-    const filter = {_id: new ObjectId(req.query.id)};
+    const filter = {_id: new ObjectId(req.query.id)};   //TODO: invalid id handling
     const update = {
-        $push: {comments: req.body.comment},    // not changing lastEdited here because comments don't feel like an edit
+        $push: {comments: {
+            comment: req.body.comment,
+            dateCreated: new Date(Date.now()),
+            contributor: new ObjectId(req.body.user)  // TODO: change this to get user from auth header
+        }},    
     };
     await client.db('daily_bugle').collection('article')
         .updateOne(filter, update)
