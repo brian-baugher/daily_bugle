@@ -58,7 +58,7 @@ app.get('/', async (req, res) => {
 
     console.log('Searching for documents with query: ' + JSON.stringify(query) + '\n');
     await client.db('daily_bugle').collection('article')
-        .find(query, {limit: 10, skip: page})
+        .find(query, {limit: 10, skip: _page})
         .toArray()
         .then(result => {
             console.log('Found documents: ' + JSON.stringify(result) + '\n');
