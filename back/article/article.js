@@ -1,7 +1,6 @@
-const http = require('http');
-const url = require('url');
-const express = require('express');
-const {MongoClient, Timestamp, ObjectId} = require('mongodb');
+import express, { json } from 'express';
+import { MongoClient, Timestamp, ObjectId } from 'mongodb';
+import { addComment } from './comment.js';
 
 const mongoURI = 'mongodb://localhost:27017' //'mongodb://host.docker.internal:27017'
 const client = new MongoClient(mongoURI);
@@ -14,7 +13,7 @@ const hostname = '0.0.0.0';
 const port = 3011;
 
 const app = express();
-app.use(express.json());
+app.use(json());
 app.listen(port, hostname, () => {console.log(`listening at http://${hostname}:${port}`)});
 
 app.post('/', async (req, res) => {
@@ -119,27 +118,5 @@ app.put('/', async (req, res) => {
 })
 
 app.put('/comment', async (req, res) => {
-    console.log('Comment PUT recieved with req body: ' + JSON.stringify(req.body) + '\n')
-    if(!req.query?.id){
-        res.status(400).send({
-            message: "no ID included in PUT"
-        })
-        return;
-    }
-    const filter = {_id: new ObjectId(req.query.id)};
-    const update = {
-        $push: {comments: req.body.comment},    // not changing lastEdited here because comments don't feel like an edit
-    };
-    await client.db('daily_bugle').collection('article')
-        .updateOne(filter, update)
-        .then(result => {
-            console.log('updated artice ' + JSON.stringify(filter) + '\nwith changes ' + JSON.stringify(update) + '\nresults: ' + JSON.stringify(result) + '\n');
-            res.send(result);
-        })
-        .catch(err => {
-            console.log('Error updating' + JSON.stringify(filter) + '\ncode: ' + err + '\n');
-            res.status(400).send({
-                message: err
-            });
-        });
+    addComment(req, res, client);
 })
