@@ -71,3 +71,49 @@ app.get('/', async (req, res) => {
             });
         })
 })
+
+/**
+ * This builds a MongoDB update query
+ * @param {Array<string>} possibleFields List of possible fields to update
+ * @param {Object} reqBody HTTP Request Body
+ * @param {Object} starterUpdate Base update - ex. use to include date modified
+ */
+const buildUpdate = (possibleFields, reqBody, starterUpdate={}) => {
+    let update = starterUpdate;
+    Object.keys(reqBody).forEach((k) => {
+        if(possibleFields.includes(k)){
+            update[k] = reqBody[k];
+        }
+    });
+    return {
+        $set: update
+    };
+}
+
+app.put('/', async (req, res) => {
+    console.log('PUT recieved with req body: ' + JSON.stringify(req.body) + '\n')
+    if(!req.body?.id){
+        res.status(400).send({
+            message: "no ID included in PUT"
+        })
+        return;
+    }
+    const filter = {_id: new ObjectId(req.body.id)};
+    const update = buildUpdate(
+        ['title', 'teaser', 'body', 'categories'], 
+        req.body,
+        {dateLastEdited: new Date(Date.now())},
+    );
+    await client.db('daily_bugle').collection('article')
+        .updateOne(filter, update)
+        .then(result => {
+            console.log('updated artice ' + JSON.stringify(filter) + '\nwith changes ' + JSON.stringify(update) + '\nresults: ' + JSON.stringify(result) + '\n');
+            res.send(result);
+        })
+        .catch(err => {
+            console.log('Error updating' + JSON.stringify(filter) + '\ncode: ' + err + '\n');
+            res.status(400).send({
+                message: err
+            });
+        });
+})
