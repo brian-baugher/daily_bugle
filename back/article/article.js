@@ -1,7 +1,7 @@
 const http = require('http');
 const url = require('url');
 const express = require('express');
-const {MongoClient, Timestamp} = require('mongodb');
+const {MongoClient, Timestamp, ObjectId} = require('mongodb');
 
 const mongoURI = 'mongodb://localhost:27017' //'mongodb://host.docker.internal:27017'
 const client = new MongoClient(mongoURI);
@@ -40,4 +40,34 @@ app.post('/', async (req, res) => {
                 message: err
             });
         });
+})
+
+app.get('/', async (req, res) => {
+    console.log('GET recieved with query ' + JSON.stringify(req.query) + '\n');
+    const {id, title, page} = req.query;
+    const _page = page ? page * 10: 0;
+    let query;
+    try{
+        query = id? new ObjectId(id) : title ? {title: {$regex: title, $options: 'i'}} : {};
+    }catch(err) {
+        console.log('Error making ObjectID with ID: ' + id + '\n');
+        res.status(400).send({
+            message: "bad object id"
+        });
+        return;
+    }
+
+    console.log('Searching for documents with query: ' + JSON.stringify(query) + '\n');
+    await client.db('daily_bugle').collection('article')
+        .find(query, {limit: 10, skip: page})
+        .toArray()
+        .then(result => {
+            console.log('Found documents: ' + JSON.stringify(result) + '\n');
+            res.send(result);
+        }).catch(err => {
+            console.log('Error finding documents ' + err);
+            res.status(500).send({
+                message: err,
+            });
+        })
 })
