@@ -33,3 +33,48 @@ app.get('/', async (req, res) => {
             });
         })
 });
+
+app.put('/impression', async (req, res) => {
+    const {ip, userAgent, eventType, user, article} = req.body;
+    if(!req.query?.ad){
+        res.status(400).send({
+            message: "no ad ID included in PUT"
+        })
+        return;
+    }
+    let adId;
+    let userId;
+    let articleId;
+    try{
+        adId = new ObjectId(req.query.ad);
+        userId = new ObjectId(user);
+        articleId = new ObjectId(article);
+    } catch (err) {
+        res.status(400).send({
+            message: "invalid ID for ad, user, or article"
+        })
+        return;
+    }
+
+    const adEvent = {
+        ad: adId,
+        user: userId,
+        article: articleId,
+        eventType: eventType,
+        userAgent: userAgent,
+        userIp: ip,
+        dateCreated: new Date(Date.now()),
+    }
+    await client.db('daily_bugle').collection('adEvent')
+        .insertOne(adEvent)
+        .then(result => {
+            console.log('inserted new adEvent ' + JSON.stringify(adEvent) + '\nresults: ' + JSON.stringify(result) + '\n');
+            res.send(result);
+        })
+        .catch(err => {
+            console.log('Error inserting ' + JSON.stringify(adEvent) + '\ncode: ' + err + '\n');
+            res.status(400).send({
+                message: err
+            });
+        });
+});
