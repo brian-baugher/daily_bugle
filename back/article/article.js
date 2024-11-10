@@ -1,7 +1,6 @@
 import express, { json } from 'express';
 import { MongoClient, Timestamp, ObjectId } from 'mongodb';
 import { addComment } from './comment.js';
-import 'cookie-parser';
 import cookieParser from 'cookie-parser';
 import {authMiddleware} from './authMiddleware.js';
 
