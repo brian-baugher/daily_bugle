@@ -23,6 +23,7 @@ app.post('/new', async (req, res) => {
             username: username,
             password: password,
         }
+    // maybe check if valid here, like no existing user?
     await client.db('daily_bugle').collection('user')
         .insertOne(user)
         .then(result => {
@@ -35,4 +36,34 @@ app.post('/new', async (req, res) => {
                 message: err
             });
         });
-})
+});
+
+app.post('/', async (req, res) => {
+    const {username, password} = req.body;
+    console.log('POST recvd, logging in user with username: ' + username + ' password: ' + password + '\n');
+    
+    const user = {
+            username: username,
+            password: password,
+        }
+    await client.db('daily_bugle').collection('user')
+        .findOne(user)
+        .then(result => {
+            if(result === null){
+                console.log('No user found with username: ' + username + ' and password: ' + password + '\n');
+                res.status(400).send({
+                    message: 'No user found with that username and password'
+                });
+                // TODO: redirect
+                return;
+            }
+            console.log('User found, logging in');
+            // TODO: redirect
+        })
+        .catch(err => {
+            console.log('Error finding ' + JSON.stringify(user) + '\ncode: ' + err + '\n');
+            res.status(500).send({
+                message: 'Internal server error, please try again'
+            });
+        });
+});
