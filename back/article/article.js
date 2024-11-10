@@ -13,7 +13,7 @@ const hostname = '0.0.0.0';
 const port = 3011;
 
 const app = express();
-app.use(json());
+app.use(json()); //make middleware like this for autho checks
 app.listen(port, hostname, () => {console.log(`listening at http://${hostname}:${port}`)});
 
 app.post('/', async (req, res) => {
