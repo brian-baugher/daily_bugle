@@ -1,6 +1,9 @@
 import express, { json } from 'express';
 import { MongoClient, Timestamp, ObjectId } from 'mongodb';
 import { addComment } from './comment.js';
+import 'cookie-parser';
+import cookieParser from 'cookie-parser';
+import {authMiddleware} from './authMiddleware.js';
 
 const mongoURI = 'mongodb://localhost:27017' //'mongodb://host.docker.internal:27017'
 const client = new MongoClient(mongoURI);
@@ -14,6 +17,8 @@ const port = 3011;
 
 const app = express();
 app.use(json()); //make middleware like this for autho checks
+app.use(cookieParser());
+app.use(authMiddleware);
 app.listen(port, hostname, () => {console.log(`listening at http://${hostname}:${port}`)});
 
 app.post('/', async (req, res) => {
