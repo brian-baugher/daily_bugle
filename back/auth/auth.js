@@ -14,6 +14,9 @@ const port = 3013;
 const app = express();
 app.use(json());
 app.listen(port, hostname, () => {console.log(`listening at http://${hostname}:${port}`)});
+app.set('trust proxy', true);
+
+let sessions = new Map();
 
 app.post('/new', async (req, res) => {
     const {username, password} = req.body;
@@ -22,6 +25,7 @@ app.post('/new', async (req, res) => {
     const user = {
             username: username,
             password: password,
+            role: 'reader'
         }
     // maybe check if valid here, like no existing user?
     await client.db('daily_bugle').collection('user')
@@ -51,14 +55,25 @@ app.post('/', async (req, res) => {
         .then(result => {
             if(result === null){
                 console.log('No user found with username: ' + username + ' and password: ' + password + '\n');
-                res.status(400).send({
+                res.status(401).send({
                     message: 'No user found with that username and password'
                 });
-                // TODO: redirect
                 return;
             }
-            console.log('User found, logging in');
-            // TODO: redirect
+            sessions.has(result._id.toString()) ? null : sessions.set(result._id.toString(), sessions.size);
+            const cookie = {
+                user: username,
+                key: sessions.get(result._id.toString()),
+                userAgent: req.headers['user-agent'],
+                ip: req.ip,
+                role: result.role,
+            }
+            console.log('User found, logging in and setting cookie: ' + JSON.stringify(cookie) + '\n');
+            res.cookie('auth', cookie, {
+                expires: new Date(Date.now() + 86400000), // now plus 1 day
+                httpOnly: true,
+            })
+            res.status(200).send();
         })
         .catch(err => {
             console.log('Error finding ' + JSON.stringify(user) + '\ncode: ' + err + '\n');
