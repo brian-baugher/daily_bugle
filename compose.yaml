@@ -10,21 +10,16 @@
 services:
   apache:
     image: httpd:latest
-    build: ./apache
+    build: 
+      dockerfile: Dockerfile
     ports:
       - 3010:80
   auth:
     build: ./back/auth
-    ports:
-      - "3013:3013"
   article:
     build: ./back/article
-    ports:
-      - "3011:3011"
   ad:
     build: ./back/ad
-    ports:
-      - "3012:3012"
   mongo:
     image: mongo:latest
     ports:
