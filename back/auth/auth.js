@@ -73,7 +73,7 @@ app.post('/', async (req, res) => {
             }
             sessions.set(sessions.size, cookie);
             console.log('User found, logging in and setting cookie: ' + JSON.stringify(cookie) + '\n');
-            res.cookie('auth', cookie, {
+            res.cookie('auth', JSON.stringify(cookie), {
                 httpOnly: true,
             })
             res.status(200).send({
@@ -88,8 +88,8 @@ app.post('/', async (req, res) => {
         });
 });
 
-const isValidSession = (sessionCookie, sessionKey) => {
-    console.log("Checking validity of cookie: " + JSON.stringify(sessionCookie) + '\n');
+const isValidSession = (parsedSessionCookie, sessionKey) => {
+    console.log("Checking validity of cookie: " + JSON.stringify(parsedSessionCookie) + '\n');
     if(!sessions.has(sessionKey)) { 
         console.log("Key not found")
         return false; 
@@ -97,9 +97,9 @@ const isValidSession = (sessionCookie, sessionKey) => {
     const storedSession = sessions.get(sessionKey);
 
     for( const k in storedSession){
-        if(storedSession[k] != sessionCookie[k]) {
+        if(storedSession[k] != parsedSessionCookie[k]) {
             console.log("Value for key : " + k + " does not match");
-            console.log("Expected: " + storedSession[k] + " Found: " + sessionCookie[k] + "\n");
+            console.log("Expected: " + storedSession[k] + " Found: " + parsedSessionCookie[k] + "\n");
             return false;
         }
     }
@@ -116,7 +116,7 @@ app.get('/', async (req, res) => {
     try{
        cookie = JSON.parse(req.cookies.auth); 
     } catch (err) {
-        console.log("No cookie or invalid cookie found: " + req.cookies.auth + "\n");
+        console.log("No cookie or invalid cookie format found: " + req.cookies.auth + "\n");
         res.redirect('../login.html');
         return;
     }
