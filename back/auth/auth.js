@@ -76,7 +76,9 @@ app.post('/', async (req, res) => {
             res.cookie('auth', cookie, {
                 httpOnly: true,
             })
-            res.status(200).send();
+            res.status(200).send({
+                role: result.role,
+            });
         })
         .catch(err => {
             console.log('Error finding ' + JSON.stringify(user) + '\ncode: ' + err + '\n');

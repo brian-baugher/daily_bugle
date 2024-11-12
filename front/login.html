@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script type="module" defer src="./login.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
 </head>
 <body>
-    <form>
-        Login to Daily Bugle
+    <form action="" id="login-form">
+        <input type="text" name="username" id="username" placeholder="username"/>
+        <input type="text" name="password" id="password" placeholder="password"/>
+        <input type="submit" value="Login"/>
     </form>
+    <p id="error-line"></p>
 </body>
-<script type="module">
-    import {getAdToDisplay, recordAdImpression} from './controllers/ad.js'
-    getAdToDisplay().then(res => {
-        console.log(res);
-    });
-
-</script>
 </html>
