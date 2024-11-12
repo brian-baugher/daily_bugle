@@ -6,9 +6,14 @@
     <title>Daily Bugle</title>
 </head>
 <body>
-    If you're seeing this page, something went wrong, please refresh
+    <button id="login">Login</button>
+    Read the daily bugle but anon
 </body>
 <script>
-    window.location.replace('http://127.0.0.1:3010/dailyBugle/auth1');
+    const login = document.getElementById('login');
+
+    login.onclick = () => {
+        window.location.replace('http://127.0.0.1:3010/dailyBugle/auth1');
+    }
 </script>
 </html>
