@@ -61,12 +61,14 @@ app.get('/', async (req, res) => {
     }
 
     console.log('Searching for documents with query: ' + JSON.stringify(query) + '\n');
+    const total = await client.db('daily_bugle').collection('article').countDocuments();
+    
     await client.db('daily_bugle').collection('article')
         .find(query, {limit: 10, skip: _page})
         .toArray()
         .then(result => {
-            console.log('Found documents: ' + JSON.stringify(result) + '\n');
-            res.send(result);
+            console.log('Found documents: ' + JSON.stringify({...result, total: total}) + '\n');
+            res.send({...result, total: total});
         }).catch(err => {
             console.log('Error finding documents ' + err);
             res.status(500).send({

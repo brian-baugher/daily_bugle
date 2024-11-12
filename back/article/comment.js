@@ -15,14 +15,24 @@ const addComment = async (req, res, client) => {
         })
         return;
     }
-    const filter = {_id: new ObjectId(req.query.id)};   //TODO: invalid id handling
-    const update = {
-        $push: {comments: {
-            comment: req.body.comment,
-            dateCreated: new Date(Date.now()),
-            contributor: new ObjectId(req.body.user)  // TODO: change this to get user from auth header
-        }},    
-    };
+    let filter;
+    let update;
+    try{
+        filter = {_id: new ObjectId(req.query.id)};
+        update = {
+            $push: {comments: {
+                comment: req.body.comment,
+                dateCreated: new Date(Date.now()),
+                contributor: new ObjectId(req.cookies.auth.userId)  // TODO: test 
+            }},    
+        };
+    } catch (err) {
+        console.log("error building filter or update: " + err + '\n');
+        res.status(400).send({
+            message: "invalid ID"
+        });
+    }
+    
     await client.db('daily_bugle').collection('article')
         .updateOne(filter, update)
         .then(result => {

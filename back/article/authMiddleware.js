@@ -21,7 +21,7 @@ const authMiddleware = (req, res, next) => {
         res.end();
         return;
     }
-    fetch(`http://apache:3010/dailyBugle/auth1/role`, {    //TODO: update port maybe
+    fetch(`http://127.0.0.1:3010/dailyBugle/auth1/role`, {    //TODO: make sure this works
         headers: {Cookie: `auth=${cookie}`}
     }).then(async result=> {
         const json = await result.json();
