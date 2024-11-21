@@ -61,7 +61,7 @@ app.get('/', async (req, res) => {
     }
 
     console.log('Searching for documents with query: ' + JSON.stringify(query) + '\n');
-    const total = await client.db('daily_bugle').collection('article').countDocuments();
+    const total = await client.db('daily_bugle').collection('article').countDocuments(query);
     
     await client.db('daily_bugle').collection('article')
         .find(query, {limit: 10, skip: _page})

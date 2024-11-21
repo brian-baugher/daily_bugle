@@ -19,13 +19,27 @@ import routes from "./routes.js"
  */
 
 /**
- * @param {number} [page=0] defaults to 0
+ * @param {Object=} args optional filters, only use oneof title OR id
+ * @param {number=} args.page defaults to first page
+ * @param {string=} args.title optional title to search by
+ * @param {string=} args.id optional specific id to fetch, page ignored
  * @returns {Array<article>} returns list of articles for given page
  */
-const getArticles = async (page) => {
-    const articles = await fetch(routes.articles + `?page=${page}`);
-    const articlesArray = await articles.json();
-    return articlesArray;
+const getArticles = async ({page, title, id}={}) => {
+    let articles;
+    if(id){
+        articles = await fetch(routes.articles + `?id=${id}`);
+    }else if(title){
+        articles = await fetch(routes.articles + `?page=${page}&title=${title}`);
+    }else{
+        articles = await fetch(routes.articles + `?page=${page}`);
+    }
+    if(articles.ok){
+        const articlesArray = await articles.json();
+        return articlesArray;
+    }
+    console.log('Error fetching articles: ' + articles.statusText)
+    return []; 
 }
 
 export {getArticles};
