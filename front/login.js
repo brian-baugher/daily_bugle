@@ -1,8 +1,12 @@
 import {getAdToDisplay, recordAdImpression} from './controllers/ad.js';
+import { getArticles } from './controllers/article.js';
 import { createUser, submitLogin } from './controllers/auth.js';
 getAdToDisplay().then(res => {
     console.log(res);
 });
+getArticles().then(a => {
+    console.log(a);
+})
 
 const loginForm = document.getElementById('login-form');
 const errorBar = document.getElementById('error-line');
