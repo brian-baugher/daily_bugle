@@ -4,7 +4,7 @@ import { addComment } from './comment.js';
 import cookieParser from 'cookie-parser';
 import {authMiddleware} from './authMiddleware.js';
 
-const mongoURI = 'mongodb://host.docker.internal:27017'
+const mongoURI = 'mongodb://localhost:27017'
 const client = new MongoClient(mongoURI);
 async function connect() {
     await client.connect();

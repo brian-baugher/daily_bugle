@@ -1,4 +1,4 @@
-const prefix = 'http://127.0.0.1:3010/dailyBugle';
+const prefix = 'http://localhost:3010/dailyBugle';
 
 /**
  * @typedef {Object} routes

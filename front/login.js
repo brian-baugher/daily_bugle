@@ -22,10 +22,10 @@ loginForm.onsubmit = /**@param {SubmitEvent} e */ async (e) => {
         return;
     }
     else if(role == 'reader'){
-        window.location.replace('http://127.0.0.1:3010/reader.html');
+        window.location.replace('http://localhost:3010/reader.html');
     }
     else if(role == 'author'){
-        window.location.replace('http://127.0.0.1:3010/author.html');
+        window.location.replace('http://localhost:3010/author.html');
     }
 }
 

@@ -2,7 +2,7 @@ import express, { json } from 'express';
 import { MongoClient, Timestamp, ObjectId } from 'mongodb';
 import cookieParser from 'cookie-parser';
 
-const mongoURI = 'mongodb://host.docker.internal:27017'
+const mongoURI = 'mongodb://localhost:27017'
 const client = new MongoClient(mongoURI);
 async function connect() {
     await client.connect();
