@@ -9,32 +9,27 @@ spec:
       claimName: pv-claim
   containers:
   - name: apache
-    image: daily-bugle-kube-apache 
-    imagePullPolicy: Never
+    image: brianbaugher/daily-bugle:apache 
     ports:
     - containerPort: 80
       name: "apache"
   - name: article
-    image: daily-bugle-kube-article
-    imagePullPolicy: Never
+    image: brianbaugher/daily-bugle:article
     ports:
     - containerPort: 3011
       name: "article"
   - name: ad
-    image: daily-bugle-kube-ad
-    imagePullPolicy: Never
+    image: brianbaugher/daily-bugle:ad
     ports:
     - containerPort: 3012
       name: "ad"
   - name: auth
-    image: daily-bugle-kube-auth
-    imagePullPolicy: Never
+    image: brianbaugher/daily-bugle:auth
     ports:
     - containerPort: 3013
       name: "auth"
   - name: mongo
-    image: daily-bugle-kube-mongo
-    imagePullPolicy: Never
+    image: mongo 
     ports:
       - containerPort: 27017
         name: "mongo"

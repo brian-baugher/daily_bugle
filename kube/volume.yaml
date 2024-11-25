@@ -11,4 +11,4 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /home/brian/daily_bugle/kube/data
+    path: "/data/db"
