@@ -31,5 +31,6 @@ USER node
 # Copy the rest of the source files into the image.
 COPY . .
 
+EXPOSE 3013
 # Run the application.
 CMD npm start
