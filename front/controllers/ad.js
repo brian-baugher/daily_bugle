@@ -1,6 +1,9 @@
 import routes from './routes.js'
 
 /**
+ * @module ad
+ */
+/**
  * @typedef {Object} ad
  * @property {string} advertisement
  * @property {string} _id

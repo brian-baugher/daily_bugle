@@ -1,19 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="./index.js" defer type="module"></script>
+    <link rel="stylesheet" href="./index.css"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Bugle</title>
 </head>
 <body>
-    <button id="login">Login</button>
-    Read the daily bugle but anon
+    <div id="nav-wrap">
+        <div id="navbar">
+            <button id="login">Login</button>
+        </div>
+    </div>
+   
+    <div id="ad-wrap">
+        <div id="ad-banner">
+        </div>
+    </div>
+    
+    <div id="content">
+        <div id="main">
+            Read the daily bugle but anon
+        </div>
+        <div id="second">
+            <div id="stories"></div>
+            <div id="side-bar"></div>
+        </div>
+    </div>
 </body>
-<script>
-    const login = document.getElementById('login');
-
-    login.onclick = () => {
-        window.location.replace('http://localhost:3010/dailyBugle/auth1');
-    }
-</script>
 </html>
