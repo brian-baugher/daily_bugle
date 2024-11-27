@@ -35,7 +35,12 @@
     <h3 id="created"></h3>
     <p id="body"></p>
     <div id="comment-wrap">
-        <div id="add-comment" hidden></div>
+        <div id="add-comment" hidden>
+            <form id="comment-form">
+                <input type="text" name="comment-text" id="comment-text" placeholder="create a new comment"/>
+                <input type="submit" value="Post"/>
+            </form>
+        </div>
         <h2>Comments:</h2>
         <div id="comments"></div>
     </div>

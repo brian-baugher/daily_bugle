@@ -50,4 +50,20 @@ const getArticles = async ({page, title, id}={}) => {
     return {result: [], total: 0}; 
 }
 
-export {getArticles};
+const submitComment = async (text, articleId) => {
+    return fetch(routes.comment + `?id=${articleId}`,{
+        body: JSON.stringify({
+            comment: text,
+        }),
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }).then(res => {
+        console.log(res);
+    }).catch(err => {
+        console.error(err);
+    });
+}
+
+export {getArticles, submitComment};

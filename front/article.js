@@ -1,4 +1,4 @@
-import { getArticles } from "./controllers/article.js";
+import { getArticles, submitComment } from "./controllers/article.js";
 import { renderAd, setupNavbar } from "./navbar.js";
 import { getCookie } from "./utils.js";
 
@@ -12,6 +12,7 @@ const editBox = document.getElementById('edit-box');
 const edit = document.getElementById('edit');
 const editForm = document.getElementById('edit-form');
 const addComment = document.getElementById('add-comment');
+const commentForm = document.getElementById('comment-form');
 const urlParams = new URLSearchParams(window.location.search);
 
 let role;
@@ -27,6 +28,16 @@ if(role === 'author'){
     edit.hidden = false;
 } else if(role === 'reader'){
     addComment.hidden = false;
+}
+
+commentForm.onsubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const commentText = formData.get('comment-text');
+    submitComment(commentText, urlParams.get('id')).then((res) => {
+        localStorage.clear();
+        window.location.reload();
+    })
 }
 
 setupNavbar(authCookieObj);
@@ -59,7 +70,7 @@ const displayArticle = () => {
         h3.innerHTML = cat;
         categories.appendChild(h3);
     })
-    article.comments.forEach(com => {
+    article.comments.reverse().forEach(com => {
         const div = document.createElement('div');
         div.classList.add('comment');
 

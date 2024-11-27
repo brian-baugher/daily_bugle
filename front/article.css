@@ -12,7 +12,8 @@
 .comment {
     padding: 2px;
     border-bottom: solid 1px darkgray;
-    width: min-content;
+    width: max-content;
+    max-width: 80vw;
 }
 
 .btn {
@@ -57,4 +58,19 @@
     display: flex;
     align-items: center;
     justify-content: end;
+}
+
+input {
+    border-radius: 5px;
+    box-shadow: none;
+    border: solid 1px gray;
+}
+
+input[type="submit"]{
+    background-color: white;
+}
+
+input[type="submit"]:hover{
+    background-color: ghostwhite;
+    cursor: pointer;
 }
