@@ -92,6 +92,7 @@ function renderArticles({page, title}){
         const title = document.createElement('h2');
         title.id = 'main-title';
         title.innerHTML = primary.title;
+        title.onclick = () => window.location.href = `/article.html?title=${primary.title}`;
         main.appendChild(title);
 
         const body = document.createElement('p');
