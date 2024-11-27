@@ -1,5 +1,6 @@
 import { getAdToDisplay, recordAdImpression } from "./controllers/ad.js";
 import { getArticles } from "./controllers/article.js";
+import { getCookie } from "./utils.js";
 
 const login = document.getElementById('login');
 const main  = document.getElementById('main');
@@ -25,14 +26,8 @@ searchForm.onsubmit = e => {
     renderArticles({page: _page, title: formData.get('title')});
 }
 
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop()?.split(';')?.shift();
-}
-
 const authCookie = getCookie('auth')
-if(authCookie){
+if(authCookie){ //TODO maybe use auth cookie here instead of substring
     const cookieObj = JSON.parse(decodeURIComponent(document.cookie.substring(5)))
     login.hidden = true;
     logout.hidden = false;
@@ -92,7 +87,11 @@ function renderArticles({page, title}){
         const title = document.createElement('h2');
         title.id = 'main-title';
         title.innerHTML = primary.title;
-        title.onclick = () => window.location.href = `/article.html?title=${primary.title}`;
+        title.classList.add('title');
+        title.onclick = () => {
+            localStorage.setItem('article', JSON.stringify(primary));
+            window.location.href = `/article.html?id=${primary._id}`;
+        }
         main.appendChild(title);
 
         const body = document.createElement('p');
@@ -107,6 +106,11 @@ function renderArticles({page, title}){
             div.classList.add('story');
             const h = document.createElement('h3');
             h.innerHTML = a.title;
+            h.classList.add('title');
+            h.onclick = () => {
+                localStorage.setItem('article', JSON.stringify(a));
+                window.location.href = `/article.html?id=${a._id}`;
+            }
             const p = document.createElement('p');
             p.innerHTML = a.teaser;
             div.appendChild(h);
