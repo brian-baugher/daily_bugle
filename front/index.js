@@ -1,18 +1,23 @@
-import { getAdToDisplay, recordAdImpression } from "./controllers/ad.js";
 import { getArticles } from "./controllers/article.js";
 import { getCookie } from "./utils.js";
+import { renderAd, setupNavbar } from "./navbar.js";
 
-const login = document.getElementById('login');
 const main  = document.getElementById('main');
 const adBanner = document.getElementById('ad-banner');
 const stories = document.getElementById('stories');
 const pageSelect = document.getElementById('page-select');
 const searchForm = document.getElementById('search');
-const username = document.getElementById('username');
-const logout = document.getElementById('logout');
+
 let _page = 0;
 let showAds = true;
 let userId;
+
+const authCookie = getCookie('auth');
+const authCookieObj = authCookie ? JSON.parse(decodeURIComponent(authCookie)) : null;
+userId = authCookieObj?.userId;
+if(authCookieObj?.role === 'author'){
+    showAds = false; 
+}
 
 pageSelect.onchange = e => {
     _page = pageSelect.value;
@@ -26,40 +31,15 @@ searchForm.onsubmit = e => {
     renderArticles({page: _page, title: formData.get('title')});
 }
 
-const authCookie = getCookie('auth')
-if(authCookie){ //TODO maybe use auth cookie here instead of substring
-    const cookieObj = JSON.parse(decodeURIComponent(document.cookie.substring(5)))
-    login.hidden = true;
-    logout.hidden = false;
-    username.hidden = false;
-    username.innerHTML = cookieObj.user; // use cookieObj.role to get role
-    if(cookieObj.role === 'author'){
-        showAds = false; 
+setupNavbar(authCookieObj);
+
+renderArticles({page: _page}).then(() => { // initial render, have to do this thening because the ad impression requires everything to load
+    if(!showAds){
+        adBanner.remove();
+        return;
     }
-    userId = cookieObj.userId;
-}
-
-logout.onclick = () => {
-    document.cookie = 'auth=; Max-Age=0; path=/';   //remove auth cookie
-    window.location.reload();
-}
-
-login.onclick = () => {
-    window.location.replace('http://localhost:3010/dailyBugle/auth1');
-}
-
-renderArticles({page: _page}).then(() => {
-    renderAd().then(() => {
-        adBanner.onclick = () => {
-            recordAdImpression({
-                adId: adBanner.getAttribute('data-id'),
-                userId: userId,
-                articeId: main.getAttribute('data-id'),
-                eventType: 'click'
-            })
-        }
-    });
-}); // initial render, have to do this thening because the ad impression requires everything to load
+    renderAd(userId, main.getAttribute('data-id'), adBanner);
+}); 
 
 /**
  * use this to re-render articles when the page changes, just call on click
@@ -117,25 +97,5 @@ function renderArticles({page, title}){
             div.appendChild(p);
             stories.appendChild(div);
         })
-    });
-}
-
-function renderAd(){
-    return getAdToDisplay().then(/**@param {import("./controllers/ad.js").ad} ad*/ ad => {
-        if(!showAds){
-            adBanner.remove();
-            return;
-        }
-        const p = document.createElement('p');
-        p.classList.add('scroll');
-        p.id = 'ad-text';
-        p.innerHTML = ad?.advertisement; // TODO: handle no ad? 
-        adBanner.appendChild(p);
-        adBanner.setAttribute('data-id', ad?._id);
-        recordAdImpression({
-            adId: ad._id, 
-            userId: userId, 
-            articeId: main.getAttribute('data-id'), 
-            eventType: 'view'});
     });
 }
