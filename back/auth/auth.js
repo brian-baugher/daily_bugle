@@ -66,7 +66,7 @@ app.post('/', async (req, res) => {
                 user: username,
                 userId: result._id,
                 key: sessions.size,
-                userAgent: req.headers['user-agent'],
+                userAgent: encodeURIComponent(req.headers['user-agent']),
                 ip: req.ip,
                 role: result.role,
                 expires: Date.now() + 86400000, // now plus 1 day
@@ -95,7 +95,9 @@ const isValidSession = (parsedSessionCookie, sessionKey) => {
     const storedSession = sessions.get(sessionKey);
 
     for( const k in storedSession){
-        if(storedSession[k] != parsedSessionCookie[k]) {
+	const expected = k === 'userAgent'? decodeURIComponent(storedSession[k]): storedSession[k];
+
+        if(expected != parsedSessionCookie[k]) {
             console.log("Value for key : " + k + " does not match");
             console.log("Expected: " + storedSession[k] + " Found: " + parsedSessionCookie[k] + "\n");
             return false;
