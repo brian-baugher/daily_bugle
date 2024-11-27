@@ -51,7 +51,7 @@ app.get('/', async (req, res) => {
     const _page = page ? page * 10: 0;
     let query;
     try{
-        query = id? new ObjectId(id) : title ? {title: {$regex: title, $options: 'i'}} : {};
+        query = id? {_id: new ObjectId(id)} : title ? {title: {$regex: title, $options: 'i'}} : {};
     }catch(err) {
         console.log('Error making ObjectID with ID: ' + id + '\n');
         res.status(400).send({
