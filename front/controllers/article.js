@@ -66,4 +66,6 @@ const submitComment = async (text, articleId) => {
     });
 }
 
+//TODO: write PUT and POST controllers
+
 export {getArticles, submitComment};

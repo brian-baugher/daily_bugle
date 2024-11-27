@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="./edit.js" defer type="module"></script>
+    <link rel="stylesheet" href="./navbar.css"/>
+    <link rel="stylesheet" href="./edit.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Bugle - Edit</title>
+</head>
+<body>
+    <div id="navbar">
+        <h1 id="logo" class="fancy">The Daily Bugle</h1>
+        <div style="display: flex; gap: 5px; align-items: center;">
+            <button id="login" class="btn">Login</button> 
+            <h3 id="username" hidden></h3>
+            <button id="logout" class="btn" hidden>Logout</button>   
+        </div>
+    </div> 
+    <div id="content">
+        <form id="edit">
+            <textarea name="title" id="title" placeholder="title"></textarea>
+            <textarea name="teaser" id="teaser" placeholder="teaser"></textarea>
+            <textarea name="body" id="body" placeholder="body"></textarea>
+        </form>
+        <ul id="categories"></ul>
+        <div id="category-adder">
+            <input type="text" id="category" placeholder="category"/>
+            <button id="add-category">add</button>
+        </div>
+        <button type="submit" form="edit" id="edit-submit">Submit</button>
+    </div>
+</body>
+</html>
