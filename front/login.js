@@ -34,7 +34,7 @@ const newModal = document.getElementById('new-modal');
 const content = document.getElementById('content');
 newUser.onclick = () => {
     content.style.display = 'none';    
-    newModal.style.display = 'block';
+    newModal.style.display = 'flex';
 }
 
 const newForm = document.getElementById('new-form');
@@ -56,6 +56,6 @@ newForm.onsubmit = /**@param {SubmitEvent} e */ async (e) => {
         errorBar.innerHTML = "New user created, please log in";
         errorBar.style.color = 'green';
         newModal.style.display = 'none';
-        content.style.display = 'block';
+        content.style.display = 'flex';
     }
 }

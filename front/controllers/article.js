@@ -19,11 +19,18 @@ import routes from "./routes.js"
  */
 
 /**
+ * @typedef {Object} articlesResult
+ * @property {Array<article>} result array of articles
+ * @property {Number} total number of total articles (for page calculation)
+ */
+
+/**
  * @param {Object=} args optional filters, only use oneof title OR id
  * @param {number=} args.page defaults to first page
  * @param {string=} args.title optional title to search by
  * @param {string=} args.id optional specific id to fetch, page ignored
- * @returns {Array<article>} returns list of articles for given page
+ * @returns {articlesResult} 
+ * @
  */
 const getArticles = async ({page, title, id}={}) => {
     let articles;
@@ -36,10 +43,11 @@ const getArticles = async ({page, title, id}={}) => {
     }
     if(articles.ok){
         const articlesJson = await articles.json();
-        return articlesJson.total > 0 ? articlesJson.result : [];
+        const result = articlesJson.total > 0 ? articlesJson.result : []
+        return {result: result, total: articlesJson.total};
     }
     console.log('Error fetching articles: ' + articles.statusText)
-    return []; 
+    return {result: [], total: 0}; 
 }
 
 export {getArticles};

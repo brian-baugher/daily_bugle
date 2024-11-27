@@ -11,7 +11,13 @@
     <div id="nav-wrap">
         <div id="navbar">
             <h1 id="logo" class="fancy">The Daily Bugle</h1>
-            <button id="login" class="btn">Login</button>
+            <div style="display: flex; gap: 5px; align-items: center;">
+                <form id="search">
+                    <input type="text" name="title" id="title" placeholder="search title"></input>
+                </form>
+                <button id="login" class="btn">Login</button>    
+            </div>
+            
         </div>
     </div>
    
@@ -26,7 +32,14 @@
         <div id="second">
             <div id="stories">
             </div>
-            <div id="side-bar"></div>
+            <div id="side-bar">
+                <div class="page-select-div">
+                    <h3>Page:</h3>
+                    <select id="page-select">
+                        <option value="0">1</option>
+                    </select>   
+                </div>
+            </div>
         </div>
     </div>
 </body>

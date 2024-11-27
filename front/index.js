@@ -5,43 +5,76 @@ const login = document.getElementById('login');
 const main  = document.getElementById('main');
 const adBanner = document.getElementById('ad-banner');
 const stories = document.getElementById('stories');
-let page = 0;
+const pageSelect = document.getElementById('page-select');
+const searchForm = document.getElementById('search');
+let _page = 0;
+
+pageSelect.onchange = e => {
+    _page = pageSelect.value;
+    renderArticles({page: pageSelect.value});
+}
+
+searchForm.onsubmit = e => {
+    e.preventDefault();
+    _page = 0;
+    const formData = new FormData(e.target);
+    renderArticles({page: _page, title: formData.get('title')});
+}
 
 login.onclick = () => {
     window.location.replace('http://localhost:3010/dailyBugle/auth1');
 }
 
-getArticles({page: page}).then(/**@param {Array<import("./controllers/article.js").article>} articles*/ articles => {
-    console.log(articles);
-    if(articles.length === 0){
-        main.innerHTML = "Oops no articles found";  // TODO: change?
-        return;
-    } 
-    const primary = articles.pop(); 
+renderArticles({page: _page}); // initial render
 
-    const title = document.createElement('h2');
-    title.id = 'main-title';
-    title.innerHTML = primary.title;
-    main.appendChild(title);
+/**
+ * use this to re-render articles when the page changes, just call on click
+ */
+function renderArticles({page, title}){
+    getArticles({page: page, title: title}).then(/**@param {import("./controllers/article.js").articlesResult} articlesResult*/ articlesResult => {
+        console.log(articlesResult);
+        if(articlesResult.total === 0){
+            main.innerHTML = "Oops no articles found";  // TODO: change?
+            return;
+        } 
+        pageSelect.replaceChildren();
+        for(let i = 1; i <= Math.ceil(articlesResult.total / 10); i++){
+            const opt = document.createElement('option');
+            opt.value = i - 1;
+            opt.innerHTML = i;
+            pageSelect.appendChild(opt);
+        }
+        pageSelect.value = page;
+        articlesResult.result.reverse();
+        const primary = articlesResult.result.pop(); 
 
-    const body = document.createElement('p');
-    body.id = 'main-body';
-    body.innerHTML = primary.body;
-    main.appendChild(body);
+        main.replaceChildren();
 
-    stories.replaceChildren();
-    articles.forEach(a => {
-        const div = document.createElement('div');
-        div.classList.add('story');
-        const h = document.createElement('h3');
-        h.innerHTML = a.title;
-        const p = document.createElement('p');
-        p.innerHTML = a.teaser;
-        div.appendChild(h);
-        div.appendChild(p);
-        stories.appendChild(div);
-    })
-});
+        const title = document.createElement('h2');
+        title.id = 'main-title';
+        title.innerHTML = primary.title;
+        main.appendChild(title);
+
+        const body = document.createElement('p');
+        body.id = 'main-body';
+        body.innerHTML = primary.body;
+        main.appendChild(body);
+
+        stories.replaceChildren();
+        articlesResult.result.forEach(a => {
+            const div = document.createElement('div');
+            div.classList.add('story');
+            const h = document.createElement('h3');
+            h.innerHTML = a.title;
+            const p = document.createElement('p');
+            p.innerHTML = a.teaser;
+            div.appendChild(h);
+            div.appendChild(p);
+            stories.appendChild(div);
+        })
+    });
+}
+
 
 getAdToDisplay().then(/**@param {import("./controllers/ad.js").ad} ad*/ ad => {
     const p = document.createElement('p');
