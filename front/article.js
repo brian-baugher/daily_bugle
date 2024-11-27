@@ -1,4 +1,5 @@
 import { getArticles } from "./controllers/article.js";
+import { renderAd, setupNavbar } from "./navbar.js";
 import { getCookie } from "./utils.js";
 
 const title = document.getElementById('title');
@@ -6,17 +7,29 @@ const categories = document.getElementById('categories');
 const created = document.getElementById('created');
 const body = document.getElementById('body');
 const comments = document.getElementById('comments');
+const adBanner = document.getElementById('ad-banner');
+const editBox = document.getElementById('edit-box');
+const edit = document.getElementById('edit');
+const editForm = document.getElementById('edit-form');
+const addComment = document.getElementById('add-comment');
 const urlParams = new URLSearchParams(window.location.search);
 
 let role;
 let userId;
+let showAds = true;
+
 const authCookie = getCookie('auth');
-if(authCookie){
-    const cookieObj = JSON.parse(decodeURIComponent(authCookie))
-    userId = cookieObj.userId;
-    role = cookieObj.role;
-    console.log(role, userId);
+const authCookieObj = authCookie ? JSON.parse(decodeURIComponent(authCookie)) : null;
+userId = authCookieObj?.userId;
+role = authCookieObj?.role;
+if(role === 'author'){
+    showAds = false; 
+    edit.hidden = false;
+} else if(role === 'reader'){
+    addComment.hidden = false;
 }
+
+setupNavbar(authCookieObj);
 
 const loadArticle = () => {
     if(!localStorage.getItem('article') ||
@@ -38,7 +51,8 @@ const displayArticle = () => {
     /**@type {import("./controllers/article.js").article} */
     const article = JSON.parse(localStorage.getItem('article'));
     title.innerHTML = article.title;
-    created.innerHTML = article.dateCreated;
+    const dateCreatedObj = new Date(article.dateCreated);
+    created.innerHTML = `Posted: ${dateCreatedObj.toLocaleDateString()}`;
     body.innerHTML = article.body;
     article.categories.forEach(cat => {
         const h3 = document.createElement('h3');
@@ -47,9 +61,11 @@ const displayArticle = () => {
     })
     article.comments.forEach(com => {
         const div = document.createElement('div');
+        div.classList.add('comment');
 
         const dateCreated = document.createElement('h4');
-        dateCreated.innerHTML = com.dateCreated;
+        const comDateObj = new Date(com.dateCreated);
+        dateCreated.innerHTML = `Commented: ${comDateObj.toLocaleDateString()}`;
         div.appendChild(dateCreated);
 
         const comment = document.createElement('p');
@@ -62,4 +78,9 @@ const displayArticle = () => {
 
 loadArticle().then(() => {
     displayArticle();
+    if(!showAds){
+        adBanner.remove();
+        return;
+    }
+    renderAd(userId, urlParams.get('id'), adBanner);
 });

@@ -1,9 +1,18 @@
 import { getAdToDisplay, recordAdImpression } from "./controllers/ad.js";
 
+const logo = document.getElementById('logo');
 const username = document.getElementById('username');
 const logout = document.getElementById('logout');
 const login = document.getElementById('login');
 
+/**
+ * use this to render an ad in the designated adBanner with tracking, 
+ * determing if it should be shown based on role is up to caller
+ * @param {string} userId hex user id
+ * @param {string} articleId hex article id
+ * @param {HTMLDivElement} adBanner place to display ad
+ * @returns thenable object
+ */
 function renderAd(userId, articleId, adBanner){
     return getAdToDisplay().then(/**@param {import("./controllers/ad.js").ad} ad*/ ad => {
         const p = document.createElement('p');
@@ -28,7 +37,14 @@ function renderAd(userId, articleId, adBanner){
     });
 }
 
+/**
+ * call this when using the (copy and pasted) Navbar to set up it's functionality
+ * make sure to import navbar.css
+ * @param {Object} authCookieObj parsed auth cookie
+ */
 function setupNavbar(authCookieObj){
+    logo.onclick = () => window.location.href = '/'
+
     logout.onclick = () => {
         document.cookie = 'auth=; Max-Age=0; path=/';   //remove auth cookie
         window.location.reload();

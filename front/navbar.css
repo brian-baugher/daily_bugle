@@ -2,14 +2,14 @@
     font-family: cursive;
 }
 
-#login {
+#login, #logout {
     background-color: rgb(247, 234, 215);
     border-radius: 10px;
     border: none;
     padding: 4px;
 }
 
-#login:hover {
+#login:hover, #logout:hover {
     cursor: pointer;
     background-color: rgb(247, 223, 191);
 }
@@ -21,6 +21,10 @@
     display: flex;
     height: inherit;
     margin: 0;
+}
+
+#logo:hover {
+    cursor: pointer;
 }
 
 #navbar {
