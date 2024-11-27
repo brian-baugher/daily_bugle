@@ -4,7 +4,8 @@
   "main": "auth.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node auth.js"
+    "start": "node auth.js",
+    "publish": "docker build -t brianbaugher/daily-bugle:auth . && docker push brianbaugher/daily-bugle:auth"
   },
   "author": "",
   "license": "ISC",

@@ -33,7 +33,7 @@ app.get('/', async (req, res) => {
 });
 
 app.put('/impression', async (req, res) => {
-    const {ip, userAgent, eventType, user, article} = req.body;
+    const {eventType, user, article} = req.body;
     if(!req.query?.ad){
         res.status(400).send({
             message: "no ad ID included in PUT"
@@ -45,7 +45,7 @@ app.put('/impression', async (req, res) => {
     let articleId;
     try{
         adId = new ObjectId(req.query.ad);
-        userId = new ObjectId(user);
+        userId = new ObjectId(user); //TODO: make userID optional for ad tracking (nvm this just works somehow)
         articleId = new ObjectId(article);
     } catch (err) {
         res.status(400).send({
@@ -59,8 +59,8 @@ app.put('/impression', async (req, res) => {
         user: userId,
         article: articleId,
         eventType: eventType,
-        userAgent: userAgent,
-        userIp: ip,
+        userAgent: req.headers['user-agent'],
+        userIp: req.ip, 
         dateCreated: new Date(Date.now()),
     }
     await client.db('daily_bugle').collection('adEvent')

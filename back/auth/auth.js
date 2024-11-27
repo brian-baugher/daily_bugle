@@ -73,9 +73,7 @@ app.post('/', async (req, res) => {
             }
             sessions.set(sessions.size, cookie);
             console.log('User found, logging in and setting cookie: ' + JSON.stringify(cookie) + '\n');
-            res.cookie('auth', JSON.stringify(cookie), {
-                httpOnly: true,
-            })
+            res.cookie('auth', JSON.stringify(cookie))
             res.status(200).send({
                 role: result.role,
             });

@@ -4,7 +4,8 @@
   "main": "ad.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ad.js"
+    "start": "node ad.js",
+    "publish": "docker build -t brianbaugher/daily-bugle:ad . && docker push brianbaugher/daily-bugle:ad"
   },
   "author": "",
   "license": "ISC",

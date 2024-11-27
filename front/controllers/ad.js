@@ -27,8 +27,6 @@ const getAdToDisplay = async () => {
  * @property {string} userId 
  * @property {string} articeId 
  * @property {string} eventType 
- * @property {string} userAgent 
- * @property {string} userIp 
  */
 
 /**
@@ -39,17 +37,14 @@ const recordAdImpression = async ({
     adId,
     userId,
     articeId,
-    eventType,
-    userAgent,
-    userIp
+    eventType
 }) => {
-    await fetch(routes.adImpression + `?id=${adId}`, {
+    console.log(adId)
+    await fetch(routes.adImpression + `?ad=${adId}`, {
         body: JSON.stringify({
             user: userId,
             artice: articeId,
             eventType: eventType,
-            userAgent: userAgent,
-            userIp: userIp,
         }),
         method: 'PUT',
         headers: {

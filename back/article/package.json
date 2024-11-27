@@ -4,7 +4,8 @@
   "main": "article.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node article.js"
+    "start": "node article.js",
+    "publish": "docker build -t brianbaugher/daily-bugle:article . && docker push brianbaugher/daily-bugle:article"
   },
   "author": "",
   "license": "ISC",

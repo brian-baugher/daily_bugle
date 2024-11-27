@@ -21,12 +21,9 @@ loginForm.onsubmit = /**@param {SubmitEvent} e */ async (e) => {
         errorBar.innerHTML = "Invalid username or password";
         return;
     }
-    else if(role == 'reader'){
-        window.location.replace('http://localhost:3010/reader.html');
-    }
-    else if(role == 'author'){
-        window.location.replace('http://localhost:3010/author.html');
-    }
+    else {
+        window.location.replace(`${window.location.origin}`)    //go to home page when logged in
+    } 
 }
 
 const newUser = document.getElementById('new-user');
