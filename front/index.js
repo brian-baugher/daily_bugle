@@ -12,15 +12,27 @@ login.onclick = () => {
 }
 
 getArticles({page: page}).then(/**@param {Array<import("./controllers/article.js").article>} articles*/ articles => {
+    console.log(articles);
     if(articles.length === 0){
-        main.innerHTML = "Oops no articles found";  // TODO: change
+        main.innerHTML = "Oops no articles found";  // TODO: change?
         return;
     } 
-    const primary = articles.pop();
-    main.innerHTML = primary.title; // TODO: change
+    const primary = articles.pop(); 
+
+    const title = document.createElement('h2');
+    title.id = 'main-title';
+    title.innerHTML = primary.title;
+    main.appendChild(title);
+
+    const body = document.createElement('p');
+    body.id = 'main-body';
+    body.innerHTML = primary.body;
+    main.appendChild(body);
+
     stories.replaceChildren();
     articles.forEach(a => {
-        const div = document.createElement('div');  //TODO style better
+        const div = document.createElement('div');
+        div.classList.add('story');
         const h = document.createElement('h3');
         h.innerHTML = a.title;
         const p = document.createElement('p');
@@ -32,7 +44,10 @@ getArticles({page: page}).then(/**@param {Array<import("./controllers/article.js
 });
 
 getAdToDisplay().then(/**@param {import("./controllers/ad.js").ad} ad*/ ad => {
-    adBanner.innerHTML = ad?.advertisement; // TODO: ad impression and handle no ad
+    const p = document.createElement('p');
+    p.classList.add('scroll');
+    p.id = 'ad-text';
+    p.innerHTML = ad?.advertisement; // TODO: and handle no ad
+    adBanner.appendChild(p);
     adBanner.setAttribute('data-id', ad?._id);
-    console.log("hdo")
 });

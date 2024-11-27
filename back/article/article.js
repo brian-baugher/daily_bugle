@@ -68,7 +68,7 @@ app.get('/', async (req, res) => {
         .toArray()
         .then(result => {
             console.log('Found documents: ' + JSON.stringify({...result, total: total}) + '\n');
-            res.send({...result, total: total});
+            res.send({result: result, total: total});
         }).catch(err => {
             console.log('Error finding documents ' + err);
             res.status(500).send({

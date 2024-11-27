@@ -35,8 +35,8 @@ const getArticles = async ({page, title, id}={}) => {
         articles = await fetch(routes.articles + `?page=${page}`);
     }
     if(articles.ok){
-        const articlesArray = await articles.json();
-        return articlesArray;
+        const articlesJson = await articles.json();
+        return articlesJson.total > 0 ? articlesJson.result : [];
     }
     console.log('Error fetching articles: ' + articles.statusText)
     return []; 
