@@ -47,7 +47,7 @@ function setupNavbar(authCookieObj){
 
     logout.onclick = () => {
         document.cookie = 'auth=; Max-Age=0; path=/';   //remove auth cookie
-        window.location.reload();
+        window.location.replace('http://localhost:3010/');   // TODO: check if on restricted page, maybe go to login auto
     }
 
     login.onclick = () => {

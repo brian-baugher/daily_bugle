@@ -7,6 +7,7 @@ const adBanner = document.getElementById('ad-banner');
 const stories = document.getElementById('stories');
 const pageSelect = document.getElementById('page-select');
 const searchForm = document.getElementById('search');
+const newArticle = document.getElementById('new-article');
 
 let _page = 0;
 let showAds = true;
@@ -17,6 +18,11 @@ const authCookieObj = authCookie ? JSON.parse(decodeURIComponent(authCookie)) : 
 userId = authCookieObj?.userId;
 if(authCookieObj?.role === 'author'){
     showAds = false; 
+    newArticle.hidden = false;
+}
+
+newArticle.onclick = () => {
+    window.location.href = '/edit.html'
 }
 
 pageSelect.onchange = e => {
@@ -48,7 +54,16 @@ function renderArticles({page, title}){
     return getArticles({page: page, title: title}).then(/**@param {import("./controllers/article.js").articlesResult} articlesResult*/ articlesResult => {
         console.log(articlesResult);
         if(articlesResult.total === 0){
-            main.innerHTML = "Oops no articles found";  // TODO: change?
+            main.replaceChildren();
+
+            const title = document.createElement('h2');
+            title.id = 'main-title';
+            title.innerHTML = "Oops no articles found";
+            title.classList.add('title');
+            main.appendChild(title);
+
+            stories.replaceChildren();
+            pageSelect.replaceChildren();
             return;
         } 
         pageSelect.replaceChildren();

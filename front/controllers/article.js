@@ -66,6 +66,42 @@ const submitComment = async (text, articleId) => {
     });
 }
 
-//TODO: write PUT and POST controllers
+const updateArticle = async (id, title, teaser, body, categories) => {
+    return fetch(routes.articles + `?id=${id}`, {
+        body: JSON.stringify({
+            title: title,
+            teaser: teaser,
+            body: body,
+            categories: categories
+        }),
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(res => {
+        return res.json();
+    }).catch(err => {
+        console.error(err);
+    })
+}
 
-export {getArticles, submitComment};
+const createArticle = async (title, teaser, body, categories) => {
+    return fetch(routes.articles, {
+        body: JSON.stringify({
+            title: title,
+            teaser: teaser,
+            body: body,
+            categories: categories
+        }),
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(res => {
+        return res.json();
+    }).catch(err => {
+        console.error(err);
+    })
+}
+
+export {getArticles, submitComment, updateArticle, createArticle};

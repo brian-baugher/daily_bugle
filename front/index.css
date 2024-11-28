@@ -69,6 +69,7 @@ body {
     flex-direction: column;
     padding: 5px;
     box-sizing: border-box;
+    gap: 10px;
 }
 
 .page-select-div {
@@ -88,4 +89,15 @@ body {
     border: solid goldenrod 1px;
     padding: 5px;
     box-sizing: border-box;
+}
+
+#new-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20%;
+}
+
+#new-article {
+    height: 30px;
 }

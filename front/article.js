@@ -1,6 +1,6 @@
-import { getArticles, submitComment } from "./controllers/article.js";
+import { submitComment } from "./controllers/article.js";
 import { renderAd, setupNavbar } from "./navbar.js";
-import { getCookie } from "./utils.js";
+import { getCookie, loadArticle } from "./utils.js";
 
 const title = document.getElementById('title');
 const categories = document.getElementById('categories');
@@ -28,6 +28,10 @@ if(role === 'author'){
     addComment.hidden = false;
 }
 
+edit.onclick = () => {
+    document.location.href = `edit.html?id=${urlParams.get('id')}`
+}
+
 commentForm.onsubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -39,22 +43,6 @@ commentForm.onsubmit = (e) => {
 }
 
 setupNavbar(authCookieObj);
-
-const loadArticle = () => {
-    if(!localStorage.getItem('article') ||
-        JSON.parse(localStorage.getItem('article'))._id != urlParams.get('id')
-    ){   // if navigated to url directly
-        console.log('localStorage empty or old, fetching article with id: ' + urlParams.get('id'))
-        return getArticles({id: urlParams.get('id')}).then(/**@param {import("./controllers/article.js").articlesResult} res */res => {
-            if(res.total === 0){
-                console.log('not found');
-                window.location.href = '/404.html';
-            }
-            localStorage.setItem('article', JSON.stringify(res.result[0]));
-        })
-    }
-    return new Promise((res, rej) => res()) // we already have it, resolve
-}
 
 const displayArticle = () => {
     /**@type {import("./controllers/article.js").article} */
@@ -85,7 +73,7 @@ const displayArticle = () => {
     })
 }
 
-loadArticle().then(() => {
+loadArticle(urlParams).then(() => {
     displayArticle();
     if(!showAds){
         adBanner.remove();
