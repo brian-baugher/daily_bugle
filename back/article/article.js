@@ -47,11 +47,14 @@ app.post('/', async (req, res) => {
 
 app.get('/', async (req, res) => {
     console.log('GET recieved with query ' + JSON.stringify(req.query) + '\n');
-    const {id, title, page} = req.query;
+    const {id, title, page, category} = req.query;
     const _page = page ? page * 10: 0;
     let query;
     try{
-        query = id? {_id: new ObjectId(id)} : title ? {title: {$regex: title, $options: 'i'}} : {};
+        query = id? {_id: new ObjectId(id)}
+        : title ? {title: {$regex: title, $options: 'i'}}
+        : category ? {categories: category}
+        : {};
     }catch(err) {
         console.log('Error making ObjectID with ID: ' + id + '\n');
         res.status(400).send({
@@ -64,7 +67,7 @@ app.get('/', async (req, res) => {
     const total = await client.db('daily_bugle').collection('article').countDocuments(query);
     
     await client.db('daily_bugle').collection('article')
-        .find(query, {limit: 10, skip: _page})
+        .find(query, {limit: 10, skip: _page, sort: {dateLastEdited: -1}})
         .toArray()
         .then(result => {
             console.log('Found documents: ' + JSON.stringify({...result, total: total}) + '\n');
@@ -76,6 +79,21 @@ app.get('/', async (req, res) => {
             });
         })
 })
+
+app.get('/categories', async (req, res) => {
+    console.log('GET recieved for categories \n')
+    await client.db('daily_bugle').collection('article')
+    .distinct('categories')
+    .then(result => {
+        console.log('Found: ' + result.toString() + '\n');
+        res.send(result);
+    }).catch(err => {
+        console.log('Error fetching categories: ' + err);
+        res.status(500).send({
+            message: err,
+        });
+    })
+});
 
 /**
  * This builds a MongoDB update query

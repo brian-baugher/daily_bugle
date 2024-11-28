@@ -24,6 +24,7 @@ role = authCookieObj?.role;
 if(role === 'author'){
     showAds = false; 
     edit.hidden = false;
+    addComment.hidden = false;
 } else if(role === 'reader'){
     addComment.hidden = false;
 }

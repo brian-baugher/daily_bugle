@@ -25,6 +25,7 @@ const prefix = 'http://localhost:3010/dailyBugle';
  * PUT
  * - required query param of `id` for associated ad
  * - req body requires `{ip, userAgent, eventType, user, article}`
+ * @property {string} categories GET
  */
 
 /**
@@ -38,6 +39,7 @@ const routes = {
     comment: prefix + '/article/comment',
     ads: prefix + '/ad',
     adImpression: prefix + '/ad/impression',
+    categories: prefix + '/article/categories',
 }
 
 export default routes;

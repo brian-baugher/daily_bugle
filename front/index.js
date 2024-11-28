@@ -1,4 +1,4 @@
-import { getArticles } from "./controllers/article.js";
+import { getArticles, getCategories } from "./controllers/article.js";
 import { getCookie } from "./utils.js";
 import { renderAd, setupNavbar } from "./navbar.js";
 
@@ -114,3 +114,5 @@ function renderArticles({page, title}){
         })
     });
 }
+
+getCategories().then(r => console.log(r))

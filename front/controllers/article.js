@@ -29,16 +29,20 @@ import routes from "./routes.js"
  * @param {number=} args.page defaults to first page
  * @param {string=} args.title optional title to search by
  * @param {string=} args.id optional specific id to fetch, page ignored
+ * @param {string=} args.category optional category to search
  * @returns {articlesResult} 
  * @
  */
-const getArticles = async ({page, title, id}={}) => {
+const getArticles = async ({page, title, id, category}={}) => {
     let articles;
     if(id){
         articles = await fetch(routes.articles + `?id=${id}`);
     }else if(title){
         articles = await fetch(routes.articles + `?page=${page}&title=${title}`);
-    }else{
+    }else if(category){
+        articles = await fetch(routes.articles + `?page=${page}category=${category}`);
+    }
+    else{
         articles = await fetch(routes.articles + `?page=${page}`);
     }
     if(articles.ok){
@@ -72,7 +76,7 @@ const updateArticle = async (id, title, teaser, body, categories) => {
             title: title,
             teaser: teaser,
             body: body,
-            categories: categories
+            categories: categories.length === 0 ? ['misc'] : categories
         }),
         method: 'PUT',
         headers: {
@@ -91,7 +95,7 @@ const createArticle = async (title, teaser, body, categories) => {
             title: title,
             teaser: teaser,
             body: body,
-            categories: categories
+            categories: categories.length === 0 ? ['misc'] : categories
         }),
         method: 'POST',
         headers: {
@@ -104,4 +108,12 @@ const createArticle = async (title, teaser, body, categories) => {
     })
 }
 
-export {getArticles, submitComment, updateArticle, createArticle};
+const getCategories = async () => {
+    return fetch(routes.categories).then(res => {
+        return res.json();
+    }).catch(err => {
+        console.error(err);
+    })
+}
+
+export {getArticles, submitComment, updateArticle, createArticle, getCategories};
