@@ -10,21 +10,25 @@ spec:
   containers:
   - name: apache
     image: brianbaugher/daily-bugle:apache 
+    imagePullPolicy: Always
     ports:
     - containerPort: 80
       name: "apache"
   - name: article
     image: brianbaugher/daily-bugle:article
+    imagePullPolicy: Always
     ports:
     - containerPort: 3011
       name: "article"
   - name: ad
+    imagePullPolicy: Always
     image: brianbaugher/daily-bugle:ad
     ports:
     - containerPort: 3012
       name: "ad"
   - name: auth
     image: brianbaugher/daily-bugle:auth
+    imagePullPolicy: Always
     ports:
     - containerPort: 3013
       name: "auth"
