@@ -69,7 +69,7 @@ addCategory.onclick = () => {
 const userId = authCookieObj?.userId;
 if(authCookieObj?.role != 'author'){    // have to be author to be here
     console.log('no')
-    window.location.replace('http://localhost/'); // TODO: uncomment
+    window.location.replace('http://localhost:3010/'); // TODO: uncomment
 }
 
 const populateText = () => {

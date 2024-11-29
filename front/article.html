@@ -11,7 +11,7 @@
 <body>
     <div id="navbar">
         <h1 id="logo" class="fancy">The Daily Bugle</h1>
-        <div style="display: flex; gap: 5px; align-items: center;">
+        <div style="display: flex; gap: 10px; padding: 5px; align-items: center;">
             <button id="login" class="btn">Login</button> 
             <h3 id="username" hidden></h3>
             <button id="logout" class="btn" hidden>Logout</button>   
@@ -26,14 +26,20 @@
             <button id="edit" class="btn" hidden>Edit</button>
         </div>
     </div>
-    <div id="categories"></div>
-    <h3 id="created"></h3>
-    <p id="body"></p>
+    <div id="info-wrapper">
+        <div id="categories"></div>
+        <h3 id="created"></h3>
+    </div>
+    <div id="body-wrapper">
+        <p id="body"></p>
+    </div>
     <div id="comment-wrap">
         <div id="add-comment" hidden>
             <form id="comment-form">
-                <input type="text" name="comment-text" id="comment-text" placeholder="create a new comment"/>
-                <input type="submit" value="Post"/>
+                <textarea type="text" name="comment-text" id="comment-text" placeholder="create a new comment"></textarea>
+                <div id="post-wrapper">
+                   <input type="submit" value="Post" id="post-comment" class="btn"/> 
+                </div>
             </form>
         </div>
         <h2>Comments:</h2>

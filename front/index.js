@@ -8,7 +8,10 @@ const stories = document.getElementById('stories');
 const pageSelect = document.getElementById('page-select');
 const searchForm = document.getElementById('search');
 const newArticle = document.getElementById('new-article');
+const categories = document.getElementById('categories')
+const newWrap = document.getElementById('new-wrap');
 
+let active;
 let _page = 0;
 let showAds = true;
 let userId;
@@ -18,7 +21,9 @@ const authCookieObj = authCookie ? JSON.parse(decodeURIComponent(authCookie)) : 
 userId = authCookieObj?.userId;
 if(authCookieObj?.role === 'author'){
     showAds = false; 
-    newArticle.hidden = false;
+    newWrap.style.display = 'flex';
+} else {
+    newWrap.style.display = 'none';
 }
 
 newArticle.onclick = () => {
@@ -50,8 +55,8 @@ renderArticles({page: _page}).then(() => { // initial render, have to do this th
 /**
  * use this to re-render articles when the page changes, just call on click
  */
-function renderArticles({page, title}){
-    return getArticles({page: page, title: title}).then(/**@param {import("./controllers/article.js").articlesResult} articlesResult*/ articlesResult => {
+function renderArticles({page, title, category}){
+    return getArticles({page: page, title: title, category: category}).then(/**@param {import("./controllers/article.js").articlesResult} articlesResult*/ articlesResult => {
         console.log(articlesResult);
         if(articlesResult.total === 0){
             main.replaceChildren();
@@ -91,7 +96,7 @@ function renderArticles({page, title}){
 
         const body = document.createElement('p');
         body.id = 'main-body';
-        body.innerHTML = primary.body;
+        body.innerHTML = primary.body.replaceAll(/(?:\r\n|\r|\n)/g, '<br>');
         main.appendChild(body);
         main.setAttribute('data-id', primary._id)
 
@@ -115,4 +120,37 @@ function renderArticles({page, title}){
     });
 }
 
-getCategories().then(r => console.log(r))
+getCategories().then(cats => {
+    const remove = document.createElement('div');
+    remove.classList.add('remove', 'category');
+    remove.onclick = (e) => {
+        active?.classList.remove('active');
+        active = null;
+        renderArticles({});
+    }
+
+    const remove_p = document.createElement('p');
+    remove_p.innerHTML = 'Clear Category Filter';
+    remove.appendChild(remove_p);
+
+    categories.appendChild(remove);
+    cats.forEach(c => {
+        const div = document.createElement('div');  //TODO: add onclick to this and state in file to highlight
+        div.classList.add('category');
+        div.onclick = (e) => {
+            if(active){
+                active.classList.remove('active');
+            }
+            div.classList.add('active');
+            active = div;
+            _page = 0;
+            renderArticles({page: _page, category: c});
+        }
+
+        const p = document.createElement('p');
+        p.innerHTML = c;
+        div.appendChild(p);
+
+        categories.appendChild(div);
+    })
+})

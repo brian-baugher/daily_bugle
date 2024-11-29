@@ -30,6 +30,7 @@ body {
     flex-direction: column;
     padding: 5px;
     gap: 4px;
+    align-items: center;
 }
 
 #main-title {
@@ -45,6 +46,7 @@ body {
     box-sizing: border-box;
     max-height: 25vh;
     overflow: scroll;
+    width: 50vw;
 }
 
 #second {
@@ -69,7 +71,8 @@ body {
     flex-direction: column;
     padding: 5px;
     box-sizing: border-box;
-    gap: 10px;
+    gap: 40px;
+    width: 30vw;
 }
 
 .page-select-div {
@@ -79,14 +82,14 @@ body {
     justify-content: center;
     gap: 5px;
     height: 20px;
+    margin-top: 20px;
 }
 
 .story {
     display: flex;
     flex-direction: column;
     width: 100%;
-    border-radius: 10px;
-    border: solid goldenrod 1px;
+    border-bottom: solid goldenrod 1px;
     padding: 5px;
     box-sizing: border-box;
 }
@@ -95,9 +98,51 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 20%;
 }
 
 #new-article {
     height: 30px;
+    font-size: x-large;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    display: flex;
+}
+
+#categories {
+    display: flex;
+    gap: 10px;
+    overflow: hidden;
+    flex-wrap: wrap;
+}
+
+.category {
+    border: solid 1px goldenrod;
+    border-radius: 5px;
+    height: 35px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    padding: 5px;
+    width: max-content;
+}
+
+.category:hover {
+    cursor: pointer;
+}
+
+.active, .category:hover {
+    background: antiquewhite;
+    border: 2px solid goldenrod;
+}
+
+.remove {
+    border-color: black;
+}
+
+.remove:hover {
+    background: lightgray;
+    border-color: black;
 }

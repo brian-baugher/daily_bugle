@@ -40,7 +40,7 @@ const getArticles = async ({page, title, id, category}={}) => {
     }else if(title){
         articles = await fetch(routes.articles + `?page=${page}&title=${title}`);
     }else if(category){
-        articles = await fetch(routes.articles + `?page=${page}category=${category}`);
+        articles = await fetch(routes.articles + `?page=${page}&category=${category}`);
     }
     else{
         articles = await fetch(routes.articles + `?page=${page}`);

@@ -11,6 +11,7 @@ const adBanner = document.getElementById('ad-banner');
 const edit = document.getElementById('edit');
 const addComment = document.getElementById('add-comment');
 const commentForm = document.getElementById('comment-form');
+const commentTextObj = document.getElementById('comment-text');
 const urlParams = new URLSearchParams(window.location.search);
 
 let role;
@@ -37,6 +38,7 @@ commentForm.onsubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const commentText = formData.get('comment-text');
+    commentTextObj.value = '';
     submitComment(commentText, urlParams.get('id')).then((res) => {
         localStorage.clear();
         window.location.reload();
@@ -51,7 +53,7 @@ const displayArticle = () => {
     title.innerHTML = article.title;
     const dateCreatedObj = new Date(article.dateCreated);
     created.innerHTML = `Posted: ${dateCreatedObj.toLocaleDateString()}`;
-    body.innerHTML = article.body;
+    body.innerHTML = article.body.replaceAll(/(?:\r\n|\r|\n)/g, '<br>');
     article.categories.forEach(cat => {
         const h3 = document.createElement('h3');
         h3.innerHTML = cat;

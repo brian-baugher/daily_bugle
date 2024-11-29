@@ -58,7 +58,7 @@ function setupNavbar(authCookieObj){
         login.hidden = true;
         logout.hidden = false;
         username.hidden = false;
-        username.innerHTML = authCookieObj.user;
+        username.innerHTML = `Hi, ${authCookieObj.user}`;
     }
 }
 
